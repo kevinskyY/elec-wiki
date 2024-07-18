@@ -1,5 +1,6 @@
 nav:
     - introduce
     - stm32
+    - opencv
     - instrumentation
     - application_note
