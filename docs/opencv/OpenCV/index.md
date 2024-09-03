@@ -18,7 +18,7 @@ dstCn 是目标图像的通道数。如果参数为默认的 0，则通道数自
 
 ### 2、HSV 色彩表
 
-![alt text](fe1cfffebcb54caf93a19d6a8509db48.png)
+![alt text](image-1.png)
 
 ### 3、cv2.inRange
 
@@ -147,7 +147,7 @@ cv2.destroyAllWindows()
 
 `dst = cv2.morphologyEx( src, op, kernel[, anchor[, iterations[, borderType[, borderValue]]]] )`
 
-![alt text](08ffe4d0884243c7ae39b74596ee7b2f.png)
+![alt text](image.png)
 
 ### 开运算
 
@@ -223,9 +223,44 @@ offset]]]]] )
 
 `retval = cv2.moments( array[, binaryImage] )`
 
-![alt text](0048e6c1811f487ea7433c262a07474e.png)
+式中有两个参数：
 
-在OpenCV中，函数cv2.moments()会同时计算上述空间矩、中心矩和归一化中心距。
+ array：可以是点集，也可以是灰度图像或者二值图像。当 array 是点集时，函数会把这
+些点集当成轮廓中的顶点，把整个点集作为一条轮廓，而不是把它们当成独立的点来看
+待。
+
+ binaryImage：该参数为 True 时，array 内所有的非零值都被处理为1。该参数仅在参数
+array 为图像时有效。
+
+该函数的返回值 retval 是矩特征，主要包括：
+
+（1）空间矩
+
+ 零阶矩：m00
+
+ 一阶矩：m10, m01
+
+ 二阶矩：m20, m11, m02
+
+ 三阶矩：m30, m21, m12, m03
+
+（2）中心矩
+
+ 二阶中心矩：mu20, mu11, mu02
+
+ 三阶中心矩：mu30, mu21, mu12, mu03
+
+（3）归一化中心矩
+
+ 二阶Hu矩：nu20, nu11, nu02
+
+ 三阶Hu矩：nu30, nu21, nu12, nu03
+
+上述矩都是根据公式计算得到的，大多数矩比较抽象。但是很明显，如果两个轮廓的矩一
+致，那么这两个轮廓就是一致的。虽然大多数矩都是通过数学公式计算得到的抽象特征，但是
+零阶矩“m00”的含义比较直观，它表示一个轮廓的面积。
+
+在 OpenCV 中，函数 cv2.moments() 会同时计算上述空间矩、中心矩和归一化中心距。
 
 ```python
 import cv2 
@@ -288,7 +323,43 @@ cv2.destroyAllWindows()
 
 `retval = cv2.arcLength( curve, closed )`
 
-![alt text](c56255a8d160439ba80476f6e681f457.png)
+上式中有两个参数：
+
+ curve 是轮廓。
+
+ closed 是布尔型值，用来表示轮廓是否是封闭的。该值为True时，表示轮廓是封闭的。
+
+```python
+import cv2 
+import numpy as np 
+#--------------读取及显示原始图像-------------------- 
+o = cv2.imread('contours0.bmp')   
+cv2.imshow("original",o) 
+#--------------获取轮廓-------------------- 
+gray = cv2.cvtColor(o,cv2.COLOR_BGR2GRAY)   
+ret, binary = cv2.threshold(gray,127,255,cv2.THRESH_BINARY)   
+image,contours, hierarchy = cv2.findContours(binary, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)   
+#--------------计算各轮廓的长度之和、平均长度-------------------- 
+n=len(contours)   # 获取轮廓的个数 
+cntLen=[]          # 存储各轮廓的长度 
+for i in range(n): 
+    cntLen.append(cv2.arcLength(contours[i],True)) 
+    print("第"+str(i)+"个轮廓的长度:%d"%cntLen[i]) 
+cntLenSum=np.sum(cntLen)  # 各轮廓的长度之和 
+cntLenAvr=cntLenSum/n      # 轮廓长度的平均值 
+print("轮廓的总长度为：%d"%cntLenSum) 
+print("轮廓的平均长度为：%d"%cntLenAvr)
+#--------------显示长度超过平均值的轮廓-------------------- 
+contoursImg=[] 
+for i in range(n): 
+    temp=np.zeros(o.shape,np.uint8) 
+    contoursImg.append(temp) 
+    contoursImg[i]=cv2.drawContours(contoursImg[i], contours, i, (255,255,255), 3) 
+    if cv2.arcLength(contours[i],True)>cntLenAvr: 
+        cv2.imshow("contours[" + str(i)+"]",contoursImg[i])     
+cv2.waitKey() 
+cv2.destroyAllWindows()
+```
 
 ## 七、角点检测
 
@@ -342,13 +413,54 @@ cv2.destroyAllWindows()
 
 `lines=cv2.HoughLines(image, rho, theta, threshold)`
 
-![alt text](3190bf12f153475987bb1fd78bc45f13.png)
+式中：
+
+ image 是输入图像，即源图像，必须是8位的单通道二值图像。如果是其他类型的图像，
+在进行霍夫变换之前，需要将其修改为指定格式。
+
+ rho 为以像素为单位的距离r的精度。一般情况下，使用的精度是1。
+
+ theta 为角度𝜃的精度。一般情况下，使用的精度是π/180，表示要搜索所有可能的角度。
+
+ threshold 是阈值。该值越小，判定出的直线就越多。通过上一节的分析可知，识别直线
+时，要判定有多少个点位于该直线上。在判定直线是否存在时，对直线所穿过的点的数
+量进行评估，如果直线所穿过的点的数量小于阈值，则认为这些点恰好（偶然）在算法
+上构成直线，但是在源图像中该直线并不存在；如果大于阈值，则认为直线存在。所以，
+如果阈值较小，就会得到较多的直线；阈值较大，就会得到较少的直线。
+
+ 返回值 lines 中的每个元素都是一对浮点数，表示检测到的直线的参数，即(r, θ)，是
+numpy.ndarray 类型。
+
+有一点需要强调的是，使用函数 cv2.HoughLines()检测到的是图像中的直线而不是线段，
+因此检测到的直线是没有端点的。所以，我们在进行霍夫直线变换时所绘制的直线都是穿过整
+幅图像的。
 
 #### 概率霍夫变换 cv2.HoughLinesP()
 
 `lines =cv2.HoughLinesP(image, rho, theta, threshold, minLineLength, maxLineGap)`
 
-![alt text](1089aeb48db04e918cbe45df3ecb5770.png)
+式中参数与返回值的含义如下：
+
+ image 是输入图像，即源图像，必须为 8 位的单通道二值图像。对于其他类型的图像，
+在进行霍夫变换之前，需要将其修改为这个指定的格式。
+
+ rho为以像素为单位的距离r的精度。一般情况下，使用的精度是1。
+
+ theta 是角度𝜃的精度。一般情况下，使用的精度是np.pi/180，表示要搜索可能的角度。
+
+ threshold 是阈值。该值越小，判定出的直线越多；值越大，判定出的直线就越少。
+
+ minLineLength 用来控制“接受直线的最小长度”的值，默认值为0。
+
+ maxLineGap 用来控制接受共线线段之间的最小间隔，即在一条线中两点的最大间隔。
+如果两点间的间隔超过了参数maxLineGap的值，就认为这两点不在一条线上。默认值
+为0。
+
+ 返回值lines是由numpy.ndarray类型的元素构成的，其中每个元素都是一对浮点数，表
+示检测到的直线的参数，即(r, θ)。
+
+与函数 cv2.HoughLines() 不同的是，函数 cv2.HoughLinesP() 返回的是直线的端点坐标，
+而不是直线的参数。
 
 ```python
 import cv2 
@@ -384,9 +496,36 @@ minRadius,
 maxRadius) 
 ```
 
-![alt text](f1224080a15840cda19c75f2c98799cf.png)
+式中参数与返回值的含义如下：
 
-![alt text](d2e95eff1e584452bb5e343d30689678.png)
+ image：输入图像，即源图像，类型为8位的单通道灰度图像。
+
+ method：检测方法。截止到OpenCV 4.0.0-pre版本，HOUGH_GRADIENT是唯一可用
+的参数值。该参数代表的是霍夫圆检测中两轮检测所使用的方法。
+
+ dp：累计器分辨率，它是一个分割比率，用来指定图像分辨率与圆心累加器分辨率的比
+例。例如，如果dp=1，则输入图像和累加器具有相同的分辨率。
+
+ minDist：圆心间的最小间距。该值被作为阈值使用，如果存在圆心间距离小于该值的
+多个圆，则仅有一个会被检测出来。因此，如果该值太小，则会有多个临近的圆被检测出来；如果该值太大，则可能会在检测时漏掉一些圆。
+
+ param1：该参数是缺省的，在缺省时默认值为100。它对应的是Canny边缘检测器的高
+阈值（低阈值是高阈值的二分之一）。
+
+ param2：圆心位置必须收到的投票数。只有在第1轮筛选过程中，投票数超过该值的圆，
+才有资格进入第2轮的筛选。因此，该值越大，检测到的圆越少；该值越小，检测到的
+圆越多。这个参数是缺省的，在缺省时具有默认值100。
+
+ minRadius：圆半径的最小值，小于该值的圆不会被检测出来。该参数是缺省的，在缺
+省时具有默认值0，此时该参数不起作用。
+
+ maxRadius：圆半径的最大值，大于该值的圆不会被检测出来。该参数是缺省的，在缺
+省时具有默认值0，此时该参数不起作用。
+
+ circles：返回值，由圆心坐标和半径构成的numpy.ndarray。
+
+需要特别注意，在调用函数 cv2.HoughLinesCircles()之前，要对源图像进行平滑操作，以
+减少图像中的噪声，避免发生误判。
 
 ```python
 import cv2 
