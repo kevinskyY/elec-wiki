@@ -18,7 +18,7 @@ dstCn 是目标图像的通道数。如果参数为默认的 0，则通道数自
 
 ### 2、HSV 色彩表
 
-![alt text](fe1cfffebcb54caf93a19d6a8509db48.png)
+![alt text](image-1.png)
 
 ### 3、cv2.inRange
 
