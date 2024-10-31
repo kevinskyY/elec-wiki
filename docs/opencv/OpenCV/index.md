@@ -17,8 +17,67 @@ code 是色彩空间转换码，表4-2展示了其枚举值。
 dstCn 是目标图像的通道数。如果参数为默认的 0，则通道数自动通过原始输入图像和 code 得到。  
 
 ### 2、HSV 色彩表
+<style>
+  #hsv-color-table table {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    border: 1px solid #ddd;
+  }
+  #hsv-color-table th, #hsv-color-table td {
+    border: 1px solid #ddd;
+    text-align: center;
+    vertical-align: middle;
+    padding: 8px;
+    height:25px;
+  }
+</style>
+<table id="hsv-color-table">
+  <tr>
+    <th rowspan="2">颜色</th>
+    <th>黑</th>
+    <th>灰</th>
+    <th>白</th>
+    <th colspan="2">红</th>
+    <th>橙</th>
+    <th>黄</th>
+    <th>绿</th>
+    <th>青</th>
+    <th>蓝</th>
+    <th>紫</th>
+  </tr>
+  <tr>
+    <td style="background-color:black; height:25px;"></td>
+    <td style="background-color:gray; height:25px;"></td>
+    <td style="background-color:white; height:25px;"></td>
+    <td colspan="2" style="background-color:red; height:25px;"></td>
+    <td style="background-color:orange; height:25px;"></td>
+    <td style="background-color:yellow; height:25px;"></td>
+    <td style="background-color:green; height:25px;"></td>
+    <td style="background-color:cyan; height:25px;"></td>
+    <td style="background-color:blue; height:25px;"></td>
+    <td style="background-color:magenta; height:25px;"></td>
+  </tr>
+  <tr>
+    <td>hmin</td><td>0</td><td>0</td><td>0</td><td>0</td><td>156</td><td>11</td><td>26</td><td>35</td><td>78</td><td>100</td><td>125</td>
+  </tr>
+  <tr>
+    <td>hmax</td><td>180</td><td>180</td><td>180</td><td>10</td><td>180</td><td>25</td><td>34</td><td>77</td><td>99</td><td>124</td><td>155</td>
+  </tr>
+  <tr>
+    <td>smin</td><td>0</td><td>0</td><td>0</td><td colspan="2">43</td><td>43</td><td>43</td><td>43</td><td>43</td><td>43</td><td>43</td>
+  </tr>
+  <tr>
+    <td>smax</td><td>255</td><td>43</td><td>30</td><td colspan="2">255</td><td>255</td><td>255</td><td>255</td><td>255</td><td>255</td><td>255</td>
+  </tr>
+  <tr>
+    <td>vmin</td><td>0</td><td>46</td><td>221</td><td colspan="2">46</td><td>46</td><td>46</td><td>46</td><td>46</td><td>46</td><td>46</td>
+  </tr>
+  <tr>
+    <td>vmax</td><td>46</td><td>220</td><td>255</td><td colspan="2">255</td><td>255</td><td>255</td><td>255</td><td>255</td><td>255</td><td>255</td>
+  </tr>
+</table>
 
-![alt text](image-1.png)
 
 ### 3、cv2.inRange
 
@@ -147,7 +206,17 @@ cv2.destroyAllWindows()
 
 `dst = cv2.morphologyEx( src, op, kernel[, anchor[, iterations[, borderType[, borderValue]]]] )`
 
-![alt text](image.png)
+| 类型                 | 说明             | 含义                | 操作                             |
+|----------------------|------------------|---------------------|----------------------------------|
+| cv2.MORPH_ERODE      | 腐蚀             | 腐蚀               | `erode(src)`                     |
+| cv2.MORPH_DILATE     | 膨胀             | 膨胀               | `dilate(src)`                    |
+| cv2.MORPH_OPEN       | 开运算           | 先腐蚀后膨胀       | `dilate(erode(src))`             |
+| cv2.MORPH_CLOSE      | 闭运算           | 先膨胀后腐蚀       | `erode(dilate(src))`             |
+| cv2.MORPH_GRADIENT   | 形态学梯度运算   | 膨胀图减腐蚀图      | `dilate(src) - erode(src)`       |
+| cv2.MORPH_TOPHAT     | 顶帽运算         | 原始图像减开运算所得图像 | `src - open(src)`             |
+| cv2.MORPH_BLACKHAT   | 黑帽运算         | 闭运算所得图像减原始图像 | `close(src) - src`           |
+| cv2.MORPH_HITMISS    | 击中击不中       | 前景与背景腐蚀运算的交集，仅支持 `CV_8UC1` 二值制图像 | `intersection(erode(src), erode(srcI))` |
+
 
 ### 开运算
 

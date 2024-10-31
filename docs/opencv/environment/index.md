@@ -4,7 +4,7 @@
 
 [Python 安装地址](https://www.python.org/downloads/)
 
-![alt text](Image_1722938058582_edit_15054463449568.png)
+![alt text](1.png)
 
 ???+ "提示"
     注意 Add PATH
@@ -19,23 +19,23 @@
 
 也可以选择专业版，使用学校邮箱进行认证。
 
-![alt text](image.png)
+![alt text](2.png)
 
-![alt text](image-1.png)
+![alt text](3.png)
 
 可自选路径
 
-![alt text](image-2.png)
+![alt text](4.png)
 
-![alt text](image-3.png)
+![alt text](5.png)
 
-![alt text](image-4.png)
+![alt text](6.png)
 
 重启
 
 中文包：
 
-![alt text](image-5.png)
+![alt text](7.png)
 
 ## 三、Anaconda 环境
 
@@ -43,11 +43,11 @@
 
 [conda 安装（清华大学开源镜像站）](https://mirrors.tuna.tsinghua.edu.cn/anaconda/archive/)
 
-![alt text](image-6.png)
+![alt text](8.png)
 
 根据自己电脑选择合适版本
 
-![alt text](image-10.png)
+![alt text](9.png)
 
 ???+ "提示"
     注意 Add PATH
@@ -56,25 +56,25 @@
 
 等待安装完成即可。
 
-![alt text](02054d49d99044418cf72bcff7bc34c2-1.png)
+![alt text](10.png)
 
 打开pycharm，使用conda环境新建项目
 
-![alt text](image-7.png)
+![alt text](11.png)
 
 在设置中查看解释器：
 
-![alt text](image-8.png)
+![alt text](12.png)
 
 添加解释器可添加自己创建的虚拟环境：
 
-![alt text](image-9.png)
+![alt text](13.png)
 
 ### 2、创建 conda 虚拟环境的方法
 
 打开 Anaconda Prompt
 
-![alt text](02054d49d99044418cf72bcff7bc34c2-1.png)
+![alt text](10.png)
 
 ```cmd
 conda create -n xxx python=3.8
@@ -83,7 +83,26 @@ conda activate xxx
 # 激活创建的虚拟环境
 ```
 
-![alt text](80d1fbb2491248a9bd7e3ba2d3f0e407_edit_15508469239.png)
+```cmd
+Downloading and Extracting Packages:
+
+Preparing transaction: done
+Verifying transaction: done
+Executing transaction: done
+#
+# To activate this environment, use
+#
+#     $ conda activate opencv
+#
+# To deactivate an active environment, use
+#
+#     $ conda deactivate
+
+
+(base) C:\Users\kevin>conda activate opencv
+
+(opencv) C:\Users\kevin>
+```
 
 前面的 base 变成你创建的虚拟环境名称即为成功。
 
@@ -117,7 +136,29 @@ Type "help", "copyright", "credits" or "license" for more information.
 
 ### 1、cmd 终端输入 nvidia-smi，查看你的显卡适配的 CUDA 版本
 
-![alt text](image-11.png)
+```cmd
+C:\Users\kevin>nvidia-smi
+Tue Aug  6 18:26:06 2024
++---------------------------------------------------------------------------------------+
+| NVIDIA-SMI 546.92                 Driver Version: 546.92       CUDA Version: 12.3     |
+|-----------------------------------------+----------------------+----------------------+
+| GPU  Name                     TCC/WDDM  | Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |         Memory-Usage | GPU-Util  Compute M. |
+|                                         |                      |               MIG M. |
+|=========================================+======================+======================|
+|   0  NVIDIA GeForce RTX 4060 ...  WDDM  | 00000000:01:00.0 Off |                  N/A |
+| N/A   45C    P8              4W /  102W |   1367MiB /  8188MiB |      2%      Default |
+|                                         |                      |                  N/A |
++-----------------------------------------+----------------------+----------------------+
+
++---------------------------------------------------------------------------------------+
+| Processes:                                                                            |
+|  GPU   GI   CI        PID   Type   Process name                            GPU Memory |
+|        ID   ID                                                             Usage      |
+|=======================================================================================|
+|  No running processes found                                                           |
++---------------------------------------------------------------------------------------+
+```
 
 ### 2、conda 创建虚拟环境
 
@@ -129,11 +170,13 @@ Anaconda Prompt 输入
 
 ### 3、下载地址： [PyTorch](https://pytorch.org/)
 
-![alt text](image-12.png)
+![alt text](14.png)
 
 根据你电脑支持的 CUDA 版本安装，我的电脑是 CUDA12.1
 
-`(pytorch) C:\Users\kevin>conda install pytorch torchvision torchaudio pytorch-cuda=12.1 -c pytorch -c nvidia`
+```cmd
+(pytorch) C:\Users\kevin>conda install pytorch torchvision torchaudio pytorch-cuda=12.1 -c pytorch -c nvidia
+```
 
 验证一下：
 
@@ -143,7 +186,15 @@ import torch
 torch.cuda.is_available()
 ```
 
-![alt text](7af74aa7-6d2f-4686-a750-b595c69d0597_edit_1557555.png)
+```cmd
+(pytorch) C:\Users\kevin>python
+Python 3.11.9 | packaged by Anaconda, Inc. | (main, Apr 19 2024, 16:40:41) [MSC v.1916 64 bit (AMD64)] on win32
+Type "help", "copyright", "credits" or "license" for more information.
+>>> import torch
+>>> torch.cuda.is_available()
+True
+>>>
+```
 
 如果返回值是 True，代表成功啦。恭喜你，安装完成，可以开始快乐的炼丹啦。
 
@@ -165,6 +216,6 @@ Install
 
 `yolo predict model=yolov8n.pt source='https://ultralytics.com/images/bus.jpg'`
 
-![alt text](image-13.png)
+![alt text](15.png)
 
 恭喜你，完成了 yolov8 的安装。
