@@ -135,6 +135,10 @@ custom_channels:
   pytorch: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
 ```
 
+换好镜像源后，使用以下命令清楚索引缓存
+
+`conda clean -i`
+
 #### （2）创建虚拟环境
 
 使用conda创建虚拟环境的命令格式为:
