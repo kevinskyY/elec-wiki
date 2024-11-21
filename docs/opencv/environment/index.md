@@ -106,33 +106,109 @@ Executing transaction: done
 
 前面的 base 变成你创建的虚拟环境名称即为成功。
 
-[具体conda使用的常用指令可以参考大神的博客](http://t.csdnimg.cn/KNZfl)
+### 3、conda 常用
+
+#### （1）换源
+
+修改 .condarc 文件（最强硬的方法）
+
+Windows 中，该文件的位置在：C:\Users\(你的用户名)\.condarc
+
+Linux 中，该文件的位置在：~/.condarc
+
+将其中的内容更改为以下内容（换成清华源）
+
+``` cmd
+channels:
+  - defaults
+show_channel_urls: true
+default_channels:
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/r
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/msys2
+custom_channels:
+  conda-forge: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
+  pytorch: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
+```
+
+#### （2）创建虚拟环境
+
+使用conda创建虚拟环境的命令格式为:
+
+`conda create -n env_name python=3.8`
+
+这表示创建python版本为3.8、名字为env_name的虚拟环境。
+
+创建后，env_name文件可以在Anaconda安装目录envs文件下找到。在不指定python版本时，自动创建基于最新python版本的虚拟环境。
+
+#### （3）查看有哪些虚拟环境
+
+ 以下三条命令都可以
+
+```cmd
+conda env list
+conda info -e
+conda info --envs
+```
+
+效果如下
+
+```cmd
+(base) C:\Users\kevin>conda env list
+# conda environments:
+#
+base                  *  D:\software\anaconda3
+cv                       D:\software\anaconda3\envs\cv
+deformable_detr          D:\software\anaconda3\envs\deformable_detr
+labelimg                 D:\software\anaconda3\envs\labelimg
+pytorch                  D:\software\anaconda3\envs\pytorch
+yolov8                   D:\software\anaconda3\envs\yolov8
+```
+
+#### （4）激活虚拟环境
+
+`conda activate env_name`
+
+#### （5）退出虚拟环境
+
+`conda deactivate`
+
+#### （6）删除虚拟环境
+
+执行以下命令可以将该指定虚拟环境及其中所安装的包都删除。
+
+`conda remove --name env_name --all`
+
+如果只删除虚拟环境中的某个或者某些包则是：
+
+`conda remove --name env_name  package_name`
 
 ## 四、OpenCV
 
+在刚刚创建的 conda 虚拟环境中
+
 先安装 numpy
 
-`pip install numpy`
+`conda install numpy`
 
 pip 安装
 
-`pip install opencv-python`
-`pip install opencv-contrib-python`
+`conda install opencv`
 
 验证一下有没有安装成功
 
 ```cmd
-C:\Users\kevin>python
-Python 3.11.7 | packaged by Anaconda, Inc. | (main, Dec 15 2023, 18:05:47) [MSC v.1916 64 bit (AMD64)] on win32
+(cv) C:\Users\kevin>python
+Python 3.12.7 | packaged by Anaconda, Inc. | (main, Oct  4 2024, 13:17:27) [MSC v.1929 64 bit (AMD64)] on win32
 Type "help", "copyright", "credits" or "license" for more information.
 >>> import cv2
 >>> print(cv2.__version__)
-4.9.0
+4.10.0
 ```
 
 ## 五、Pytorch（深度学习环境）
 
-前提：你的电脑有GPU
+前提：你的电脑有 N 卡
 
 ### 1、cmd 终端输入 nvidia-smi，查看你的显卡适配的 CUDA 版本
 
