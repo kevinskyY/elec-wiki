@@ -110,7 +110,11 @@ Executing transaction: done
 
 #### （1）换源
 
-修改 .condarc 文件（最强硬的方法）
+Windows 用户无法直接创建名为 .condarc 的文件，可先执行 `conda config --set show_channel_urls yes` 生成该文件之后再修改。
+
+> 引用自 [https://mirrors.tuna.tsinghua.edu.cn/help/anaconda/](https://mirrors.tuna.tsinghua.edu.cn/help/anaconda/)
+
+修改 .condarc 文件
 
 Windows 中，该文件的位置在：C:\Users\(你的用户名)\.condarc
 
