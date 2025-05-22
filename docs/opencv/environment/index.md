@@ -77,7 +77,7 @@
 ![alt text](10.png)
 
 ```cmd
-conda create -n xxx python=3.8
+conda create -n xxx python=3.11
 # xxx改成你的虚拟环境名字 python=版本号
 conda activate xxx
 # 激活创建的虚拟环境
@@ -143,9 +143,9 @@ custom_channels:
 
 使用conda创建虚拟环境的命令格式为:
 
-`conda create -n env_name python=3.8`
+`conda create -n env_name python=3.11`
 
-这表示创建python版本为3.8、名字为env_name的虚拟环境。
+这表示创建python版本为3.11、名字为env_name的虚拟环境。
 
 创建后，env_name文件可以在Anaconda安装目录envs文件下找到。在不指定python版本时，自动创建基于最新python版本的虚拟环境。
 
@@ -248,7 +248,7 @@ Tue Aug  6 18:26:06 2024
 
 Anaconda Prompt 输入
 
-`conda create -n pytorch python=3.8`
+`conda create -n pytorch python=3.11`
 
 `conda activate pytorch`
 
